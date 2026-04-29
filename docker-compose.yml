@@ -1,0 +1,29 @@
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: yt-sync-backend
+    restart: unless-stopped
+    volumes:
+      # Map a persistent local folder to the container's download path
+      - ./downloads:/app/downloads
+      # Map a persistent database file
+      - ./data:/app/data
+    environment:
+      - DATABASE_URL=sqlite:////app/data/app.db
+      - TZ=UTC
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: yt-sync-frontend
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
