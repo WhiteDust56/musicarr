@@ -1,0 +1,5 @@
+backend/app.db
+backend/__pycache__/
+*.pyc
+frontend/dist/
+frontend/node_modules/
