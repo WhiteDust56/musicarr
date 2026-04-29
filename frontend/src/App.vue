@@ -74,8 +74,12 @@ button {
   cursor: pointer;
   font-size: 1rem;
 }
-button:hover {
+button:hover:not(:disabled) {
   background: #2980b9;
+}
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 input, select {
   padding: 10px;
