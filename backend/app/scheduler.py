@@ -41,9 +41,7 @@ async def sync_job():
                         continue
 
                     track = existing_tracks.get(video_id)
-
                     if not track:
-                        title = track_data.get('title', 'Unknown Title')
                         artists = track_data.get('artists', [{'name': 'Unknown Artist'}])
                         artist_name = artists[0]['name'] if artists else 'Unknown Artist'
 
@@ -56,6 +54,7 @@ async def sync_job():
                         )
                         db.add(track)
                         db.commit()
+                        existing_tracks[video_id] = track
 
                     # Process pending tracks
                     if track.status == "pending":
