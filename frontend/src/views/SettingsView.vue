@@ -84,6 +84,14 @@ const testSabnzbd = async () => {
         <input id="indexer-api-key" v-model="settings.indexer_api_key" type="password" />
       </div>
       <button @click="testIndexer" :disabled="isTestingIndexer">{{ isTestingIndexer ? 'Testing...' : 'Test Indexer Connection' }}</button>
+        <label>Newznab API URL</label>
+        <input v-model="settings.indexer_url" placeholder="http://indexer.com" />
+      </div>
+      <div class="form-group">
+        <label>Indexer API Key</label>
+        <input v-model="settings.indexer_api_key" type="password" />
+      </div>
+      <button @click="testIndexer">Test Indexer Connection</button>
     </div>
 
     <div class="card">
@@ -97,6 +105,14 @@ const testSabnzbd = async () => {
         <input id="sabnzbd-api-key" v-model="settings.sabnzbd_api_key" type="password" />
       </div>
       <button @click="testSabnzbd" :disabled="isTestingSabnzbd">{{ isTestingSabnzbd ? 'Testing...' : 'Test SABnzbd Connection' }}</button>
+        <label>SABnzbd URL</label>
+        <input v-model="settings.sabnzbd_url" placeholder="http://localhost:8080" />
+      </div>
+      <div class="form-group">
+        <label>SABnzbd API Key</label>
+        <input v-model="settings.sabnzbd_api_key" type="password" />
+      </div>
+      <button @click="testSabnzbd">Test SABnzbd Connection</button>
     </div>
 
     <div class="card">
@@ -104,6 +120,8 @@ const testSabnzbd = async () => {
       <div class="form-group">
         <label for="preferred-quality">Preferred Quality</label>
         <select id="preferred-quality" v-model="settings.quality">
+        <label>Preferred Quality</label>
+        <select v-model="settings.quality">
           <option value="MP3">MP3</option>
           <option value="FLAC">FLAC</option>
         </select>
@@ -119,5 +137,15 @@ const testSabnzbd = async () => {
     </div>
 
     <button @click="saveSettings" :disabled="isSaving" style="width: 100%; font-size: 1.2rem; padding: 15px;">{{ isSaving ? 'Saving...' : 'Save Settings' }}</button>
+        <label>Sync Interval (Minutes)</label>
+        <input v-model.number="settings.sync_interval_minutes" type="number" />
+      </div>
+      <div class="form-group">
+        <label>YT-DLP Fallback Download Path</label>
+        <input v-model="settings.download_path" placeholder="./downloads" />
+      </div>
+    </div>
+
+    <button @click="saveSettings" style="width: 100%; font-size: 1.2rem; padding: 15px;">Save Settings</button>
   </div>
 </template>
