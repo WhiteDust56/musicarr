@@ -1,0 +1,1 @@
+## 2024-05-24 - N+1 Query in Playlist Sync\n**Learning:** The background sync job queries the database for each track sequentially during playlist sync, which creates an N+1 query problem with up to 200 queries per playlist.\n**Action:** Optimize by pre-fetching all existing tracks for a playlist into a hash map before iterating over the tracks.
