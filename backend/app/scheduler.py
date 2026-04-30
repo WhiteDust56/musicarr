@@ -29,20 +29,15 @@ async def sync_job():
                 if 'tracks' not in yt_playlist:
                     continue
 
-                # ⚡ Bolt: Pre-fetch all existing tracks to prevent N+1 query problem
-                # This reduces up to 200 DB queries per playlist to just 1 query
-                existing_tracks = {
-                    track.video_id: track
-                    for track in db.query(Track).filter(Track.playlist_id == playlist.id).all()
-                }
-
                 for track_data in yt_playlist['tracks']:
                     video_id = track_data.get('videoId')
                     if not video_id:
                         continue
 
-                    track = existing_tracks.get(video_id)
+                    track = db.query(Track).filter(Track.video_id == video_id, Track.playlist_id == playlist.id).first()
+
                     if not track:
+                        title = track_data.get('title', 'Unknown Title')
                         artists = track_data.get('artists', [{'name': 'Unknown Artist'}])
                         artist_name = artists[0]['name'] if artists else 'Unknown Artist'
 
@@ -55,7 +50,6 @@ async def sync_job():
                         )
                         db.add(track)
                         db.commit()
-                        existing_tracks[video_id] = track
 
                     # Process pending tracks
                     if track.status == "pending":

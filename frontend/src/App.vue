@@ -81,9 +81,6 @@ button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
-button:hover {
-  background: #2980b9;
-}
 input, select {
   padding: 10px;
   border: 1px solid #ddd;
