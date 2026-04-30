@@ -43,7 +43,6 @@ async def sync_job():
 
                     track = existing_tracks.get(video_id)
                     if not track:
-                        title = track_data.get('title', 'Unknown Title')
                         artists = track_data.get('artists', [{'name': 'Unknown Artist'}])
                         artist_name = artists[0]['name'] if artists else 'Unknown Artist'
 
