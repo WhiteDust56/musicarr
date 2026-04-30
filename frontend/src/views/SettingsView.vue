@@ -14,6 +14,10 @@ const settings = ref({
 })
 const message = ref('')
 
+const isSaving = ref(false)
+const isTestingIndexer = ref(false)
+const isTestingSabnzbd = ref(false)
+
 onMounted(async () => {
   try {
     const res = await axios.get(`${API_BASE}/settings/`)
@@ -24,6 +28,7 @@ onMounted(async () => {
 })
 
 const saveSettings = async () => {
+  isSaving.value = true
   try {
     const res = await axios.put(`${API_BASE}/settings/`, settings.value)
     settings.value = res.data
@@ -31,24 +36,32 @@ const saveSettings = async () => {
     setTimeout(() => message.value = '', 3000)
   } catch (err) {
     message.value = 'Failed to save settings.'
+  } finally {
+    isSaving.value = false
   }
 }
 
 const testIndexer = async () => {
+  isTestingIndexer.value = true
   try {
     const res = await axios.post(`${API_BASE}/settings/test-indexer`, settings.value)
     alert(res.data.message)
   } catch (err) {
     alert('Test failed')
+  } finally {
+    isTestingIndexer.value = false
   }
 }
 
 const testSabnzbd = async () => {
+  isTestingSabnzbd.value = true
   try {
     const res = await axios.post(`${API_BASE}/settings/test-sabnzbd`, settings.value)
     alert(res.data.message)
   } catch (err) {
     alert('Test failed')
+  } finally {
+    isTestingSabnzbd.value = false
   }
 }
 </script>
@@ -63,6 +76,14 @@ const testSabnzbd = async () => {
     <div class="card">
       <h2>Indexer Configuration</h2>
       <div class="form-group">
+        <label for="indexer-url">Newznab API URL</label>
+        <input id="indexer-url" v-model="settings.indexer_url" placeholder="http://indexer.com" />
+      </div>
+      <div class="form-group">
+        <label for="indexer-api-key">Indexer API Key</label>
+        <input id="indexer-api-key" v-model="settings.indexer_api_key" type="password" />
+      </div>
+      <button @click="testIndexer" :disabled="isTestingIndexer">{{ isTestingIndexer ? 'Testing...' : 'Test Indexer Connection' }}</button>
         <label>Newznab API URL</label>
         <input v-model="settings.indexer_url" placeholder="http://indexer.com" />
       </div>
@@ -76,6 +97,14 @@ const testSabnzbd = async () => {
     <div class="card">
       <h2>SABnzbd Configuration</h2>
       <div class="form-group">
+        <label for="sabnzbd-url">SABnzbd URL</label>
+        <input id="sabnzbd-url" v-model="settings.sabnzbd_url" placeholder="http://localhost:8080" />
+      </div>
+      <div class="form-group">
+        <label for="sabnzbd-api-key">SABnzbd API Key</label>
+        <input id="sabnzbd-api-key" v-model="settings.sabnzbd_api_key" type="password" />
+      </div>
+      <button @click="testSabnzbd" :disabled="isTestingSabnzbd">{{ isTestingSabnzbd ? 'Testing...' : 'Test SABnzbd Connection' }}</button>
         <label>SABnzbd URL</label>
         <input v-model="settings.sabnzbd_url" placeholder="http://localhost:8080" />
       </div>
@@ -89,6 +118,8 @@ const testSabnzbd = async () => {
     <div class="card">
       <h2>Preferences & Fallback</h2>
       <div class="form-group">
+        <label for="preferred-quality">Preferred Quality</label>
+        <select id="preferred-quality" v-model="settings.quality">
         <label>Preferred Quality</label>
         <select v-model="settings.quality">
           <option value="MP3">MP3</option>
@@ -96,6 +127,16 @@ const testSabnzbd = async () => {
         </select>
       </div>
       <div class="form-group">
+        <label for="sync-interval">Sync Interval (Minutes)</label>
+        <input id="sync-interval" v-model.number="settings.sync_interval_minutes" type="number" />
+      </div>
+      <div class="form-group">
+        <label for="download-path">YT-DLP Fallback Download Path</label>
+        <input id="download-path" v-model="settings.download_path" placeholder="./downloads" />
+      </div>
+    </div>
+
+    <button @click="saveSettings" :disabled="isSaving" style="width: 100%; font-size: 1.2rem; padding: 15px;">{{ isSaving ? 'Saving...' : 'Save Settings' }}</button>
         <label>Sync Interval (Minutes)</label>
         <input v-model.number="settings.sync_interval_minutes" type="number" />
       </div>
