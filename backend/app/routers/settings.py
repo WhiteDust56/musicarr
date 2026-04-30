@@ -53,7 +53,7 @@ async def test_indexer(request: TestIntegrationRequest):
         raise HTTPException(status_code=400, detail="Indexer URL and API Key are required")
     url = request.indexer_url.rstrip('/')
     try:
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"}) as client:
             response = await client.get(
                 f"{url}/api",
                 params={"t": "caps", "apikey": request.indexer_api_key, "o": "json"},
@@ -73,7 +73,7 @@ async def test_sabnzbd(request: TestIntegrationRequest):
         raise HTTPException(status_code=400, detail="SABnzbd URL and API Key are required")
     url = request.sabnzbd_url.rstrip('/')
     try:
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"}) as client:
             response = await client.get(
                 f"{url}/api",
                 params={"mode": "version", "apikey": request.sabnzbd_api_key, "output": "json"},
