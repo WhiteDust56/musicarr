@@ -28,7 +28,7 @@ async def search_indexer(settings: Settings, artist: str, title: str):
     }
 
     try:
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"}) as client:
             response = await client.get(f"{url}/api", params=params, timeout=15.0)
             response.raise_for_status()
 
@@ -67,7 +67,7 @@ async def send_to_sabnzbd(settings: Settings, nzb_url: str, name: str):
     }
 
     try:
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"}) as client:
             response = await client.post(f"{url}/api", data=params, timeout=10.0)
             response.raise_for_status()
             data = response.json()
@@ -87,7 +87,7 @@ async def get_sabnzbd_queue(settings: Settings):
         "output": "json"
     }
     try:
-         async with httpx.AsyncClient() as client:
+         async with httpx.AsyncClient(headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"}) as client:
             response = await client.get(f"{url}/api", params=params, timeout=10.0)
             response.raise_for_status()
             return response.json()
@@ -105,7 +105,7 @@ async def get_sabnzbd_history(settings: Settings):
         "limit": 100
     }
     try:
-         async with httpx.AsyncClient() as client:
+         async with httpx.AsyncClient(headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"}) as client:
             response = await client.get(f"{url}/api", params=params, timeout=10.0)
             response.raise_for_status()
             return response.json()
